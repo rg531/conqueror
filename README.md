@@ -59,6 +59,10 @@ kubectl exec -it -n $namespace $pod -- /tmp/conqueror
 kubectl exec -i -n $namespace $pod -- /tmp/conqueror --json
 ```
 
+### Example output
+
+![Example output:](docs/cli_1.png)
+
 ## What to do with the findings?
 
 If you need help in professionally rating and resolving those findings for your environment,
