@@ -19,6 +19,8 @@ Output includes:
 Requires Go 1.26.11+. Compile a static, dependency-free binary ready to copy into minimal containers:
 
 ```bash
+go mod download
+
 # Linux x86_64
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o conqueror ./cmd/user-tool
 
