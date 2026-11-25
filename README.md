@@ -16,13 +16,13 @@ Output includes:
 
 ## Build
 
-Compile a static, dependency-free binary ready to copy into minimal containers:
+Requires Go 1.26.11+. Compile a static, dependency-free binary ready to copy into minimal containers:
 
 ```bash
 # Linux x86_64
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o conqueror ./cmd/user-tool
 
-# Linux ARM64 (e.g. Raspberry Pi, Apple Silicon Docker)
+# Linux ARM64
 CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -trimpath -ldflags="-s -w" -o conqueror ./cmd/user-tool
 ```
 
@@ -82,6 +82,10 @@ Because `CONQUEROR` is designed to run directly inside sensitive container envir
   - **Local Network & Sockets (`net`):** Inspects local network interfaces (`net.InterfaceAddrs`) and checks local Unix/TCP sockets (`net.DialTimeout`) for exposed Docker daemons.
   - **Cloud Metadata (`net/http`):** Performs `GET` requests to the local address `http://169.254.169.254` to detect cloud provider metadata endpoints (AWS, GCP, Azure, etc.).
   - **Kubernetes API (`k8s.io/client-go`):** Uses the pod's mounted ServiceAccount token (in-cluster config) to perform read-only RBAC self-subject access reviews and permission checks.
+
+## License
+
+Licensed under the [Apache License, Version 2.0](LICENSE).
 
 ## Disclaimer
 

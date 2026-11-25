@@ -1,4 +1,4 @@
-module conqueror
+module github.com/rg531/conqueror
 
 go 1.26.11
 

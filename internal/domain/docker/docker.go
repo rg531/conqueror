@@ -23,7 +23,7 @@ func IsDockerEnv() bool {
 func HasDockerSocket() {
 	proof, success := sockets.HasDockerSocket()
 	if success {
-		events.HandleVulnerability(events.Docker, "docker socket found", "has_docket_socket", proof)
+		events.HandleVulnerability(events.Docker, "docker socket found", "has_docker_socket", proof)
 	} else {
 		events.HandleInfo("no docker socket found", proof)
 	}
