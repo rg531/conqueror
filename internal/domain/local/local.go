@@ -59,9 +59,9 @@ var DANGEROUS_OS_GROUP_IDS = []string{
 func IsReadOnlyRootFS() {
 	proof, success := linux.IsReadOnlyRootFS()
 	if success {
-		events.HandleInfo("filesystem is readonly", proof)
+		events.HandleInfo("filesystem is read-only", proof)
 	} else {
-		events.HandleVulnerability(events.OS, "writing to root-fileystem was possible", "is_not_readonlyrootfs", proof)
+		events.HandleVulnerability(events.OS, "fileystem is not read-only", "is_not_read_only_root_fs", proof)
 	}
 }
 func GetCmdline() {
@@ -77,14 +77,9 @@ func GetEnv() {
 	env := linux.GetEnv()
 	if len(env) == 0 {
 		events.HandleError("no environment variables found", nil)
-	} else {
-		events.HandleInfo("environment variables:", "")
-		for _, variable := range env {
-			events.HandleInfo("-> "+variable, "")
-		}
 	}
 	// detect sensitive info:
-	var secretPattern = regexp.MustCompile(`(?i)(password|secret|token|api|key|passwd|credential|private)`)
+	var secretPattern = regexp.MustCompile(`(?i)(pass(word|wd)?|secret|token|api[-_]?key|credential|private|auth|bearer|cert|dsn|connection[-_]?string)`)
 	for _, env := range env {
 		// split on first "=":
 		pair := strings.SplitN(env, "=", 2)
@@ -149,7 +144,7 @@ func IsPrivileged() {
 	if success {
 		events.HandleVulnerability(events.OS, "privileged container found", "is_privileged", proof)
 	} else {
-		events.HandleInfo("likely not in a privileged container.", proof)
+		events.HandleInfo("likely not in a privileged container", proof)
 	}
 }
 

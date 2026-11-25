@@ -76,13 +76,14 @@ feel free to connect with me on linkedin or upwork:
 
 Because `CONQUEROR` is designed to run directly inside sensitive container environments, it follows strict transparency and least-privilege principles:
 
-- **Strictly Read-Only:** All checks are non-destructive. `CONQUEROR` never modifies files, processes, container configurations, or Kubernetes resources.
-- **No External Telemetry:** No scan results or telemetry are sent to external servers. All findings are written exclusively to `stdout` (terminal logs or JSON).
+- **Non-Destructive & Read-Only by Design:** All checks are passive or read-only. `CONQUEROR` never modifies files, processes, container configurations, or Kubernetes resources.
+- **Sensitive Data Redaction:** Designed to prevent accidental credential exposure. Typical credential sources (Kubernetes tokens & secrets, OS-level files, environment variables) are inspected, with values matching sensitive patterns automatically masked prior to output.
+- **No External Telemetry:** No scan results or telemetry are transmitted to external servers. All findings are written exclusively to `stdout` (terminal logs or JSON).
 - **Auditable System & Network Access:**
-  - **Filesystem & OS (`os`, `os/user`):** Reads `/proc`, `/etc`, environment variables (`os.Environ`), hostname, user/group IDs, mount information, typical docker-related files as `/.dockerenv` or `docker.sock`.
+  - **Filesystem & OS (`os`, `os/user`):** Reads `/proc`, `/etc`, environment variables (`os.Environ`), hostname, user/group IDs, mount information, and typical container-related files such as `/.dockerenv` or `docker.sock`.
   - **Subprocess (`os/exec`):** Executes a single read-only command (`uname -a`) to determine kernel details.
-  - **Local Network & Sockets (`net`):** Inspects local network interfaces (`net.InterfaceAddrs`) and checks local Unix/TCP sockets (`net.DialTimeout`) for exposed Docker daemons.
-  - **Cloud Metadata (`net/http`):** Performs `GET` requests to the local address `http://169.254.169.254` to detect cloud provider metadata endpoints (AWS, GCP, Azure, etc.).
+  - **Local Network & Sockets (`net`):** Inspects local network interfaces (`net.InterfaceAddrs`) and probes local Unix/TCP sockets (`net.DialTimeout`) for exposed Docker daemons.
+  - **Cloud Metadata (`net/http`):** Performs read-only `GET` requests to the link-local address `http://169.254.169.254` to detect cloud provider metadata endpoints (AWS, GCP, Azure, etc.).
   - **Kubernetes API (`k8s.io/client-go`):** Uses the pod's mounted ServiceAccount token (in-cluster config) to perform read-only RBAC self-subject access reviews and permission checks.
 
 ## License
@@ -91,4 +92,4 @@ Licensed under the [Apache License, Version 2.0](LICENSE).
 
 ## Disclaimer
 
-`CONQUEROR` is provided "as is", without warranty of any kind. Security checks are best-effort heuristics and do not guarantee the absence of vulnerabilities or misconfigurations. Always combine automated scans with manual reviews and defense-in-depth practices. Only run this tool on environments that you own or have explicit permission to test.
+`CONQUEROR` is provided "as is", without warranty of any kind. Security checks and data redaction rely on best-effort heuristics and do not guarantee complete secret masking or the absence of vulnerabilities and misconfigurations. Always combine automated scans with manual reviews and defense-in-depth practices. Only run this tool on environments that you own or have explicit permission to test.

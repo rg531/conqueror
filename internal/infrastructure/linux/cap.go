@@ -9,8 +9,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
-	"golang.org/x/sys/unix"
 )
 
 // Dangerous Capability Bits
@@ -38,16 +36,14 @@ func GetCapabilities() (string, error) {
 }
 
 func IsCapSysAdmin() (bool, string) {
-	// Wir versuchen eine Kernel-Aktion (Remount), die exakt CAP_SYS_ADMIN erfordert.
-	err := unix.Mount("/", "/", "", unix.MS_REMOUNT, "")
-
-	// Wenn der Fehler "Permission Denied" (EPERM) ist, fehlen uns die Rechte.
-	if err == unix.EPERM {
-		return false, "permission denied (EPERM) on live kernel file-system remount"
-	} else if err != nil {
-		return true, fmt.Sprintf("live kernel file-system remount on '/' was not denied but answered with: %s", err)
+	caps, err := GetCapabilities()
+	if err != nil {
+		return false, fmt.Sprintf("failed to read capabilities from /proc/self/status: %v", err)
 	}
-	return true, "successfully executed a live kernel file-system remount on '/' (operation allowed)"
+	if strings.Contains(caps, "CAP_SYS_ADMIN") {
+		return true, "CAP_SYS_ADMIN found in /proc/self/status"
+	}
+	return false, "CAP_SYS_ADMIN not found in /proc/self/status"
 }
 
 func decode(hexCaps string) string {

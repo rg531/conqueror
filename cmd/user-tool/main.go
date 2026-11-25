@@ -26,8 +26,8 @@ func main() {
 	local.RunningAsRoot()
 	local.GetGroups()
 	local.IsReadOnlyRootFS()
-	local.IsPrivileged()
 	local.Capsh()
+	local.IsPrivileged()
 	local.GetCmdline()
 	local.GetEnv()
 
