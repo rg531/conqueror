@@ -76,7 +76,7 @@ feel free to connect with me on linkedin or upwork:
 
 Because `CONQUEROR` is designed to run directly inside sensitive container environments, it follows strict transparency and least-privilege principles:
 
-- **Non-Destructive & Read-Only by Design:** All checks are passive or read-only. `CONQUEROR` never modifies files, processes, container configurations, or Kubernetes resources.
+- **Non-Destructive & Read-Only by Design:** All runtime security checks are passive or read-only. `CONQUEROR` never modifies files, processes, container configurations, or Kubernetes resources. Note that the *Deploy & Run* section outlines `cp` and `exec` calls for `kubectl` and `docker` to deploy the tool to `/tmp`. 
 - **Sensitive Data Redaction:** Designed to prevent accidental credential exposure. Typical credential sources (Kubernetes tokens & secrets, OS-level files, environment variables) are inspected, with values matching sensitive patterns automatically masked prior to output.
 - **No External Telemetry:** No scan results or telemetry are transmitted to external servers. All findings are written exclusively to `stdout` (terminal logs or JSON).
 - **Auditable System & Network Access:**
@@ -84,7 +84,7 @@ Because `CONQUEROR` is designed to run directly inside sensitive container envir
   - **Subprocess (`os/exec`):** Executes a single read-only command (`uname -a`) to determine kernel details.
   - **Local Network & Sockets (`net`):** Inspects local network interfaces (`net.InterfaceAddrs`) and probes local Unix/TCP sockets (`net.DialTimeout`) for exposed Docker daemons.
   - **Cloud Metadata (`net/http`):** Performs read-only `GET` requests to the link-local address `http://169.254.169.254` to detect cloud provider metadata endpoints (AWS, GCP, Azure, etc.).
-  - **Kubernetes API (`k8s.io/client-go`):** Uses the pod's mounted ServiceAccount token (in-cluster config) to perform read-only RBAC self-subject access reviews and permission checks.
+  - **Kubernetes API (`k8s.io/client-go`):** Uses the pod's mounted ServiceAccount token (in-cluster config) to perform read-only RBAC self-subject access reviews and permission checks (note that the kubernetes API uses HTTP POST for some of those calls although they boil down to a 'list' or 'get' in API terms).
 
 ## License
 
