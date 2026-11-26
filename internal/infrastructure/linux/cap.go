@@ -62,7 +62,7 @@ func decode(hexCaps string) string {
 	}
 
 	if len(found) == 0 {
-		return fmt.Sprintf("none of the top 6 dangerous caps found in CapEff [%d]", caps)
+		return fmt.Sprintf("none of the top 6 dangerous caps found in CapEff [0x%x]", caps)
 	}
 	return strings.Join(found, ", ")
 }
