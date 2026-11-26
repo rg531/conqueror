@@ -18,7 +18,7 @@ func main() {
 	mode := GetMode()
 	events.SetMode(mode)
 
-	events.HandleInfo("----- CONQUEROR v1.2.0 -----", "")
+	events.HandleInfo("----- CONQUEROR v1.2.1 -----", "")
 	events.HandleInfo("", "")
 	events.HandleInfo("----- [ OS Checks ] -----", "")
 	local.GetSystemIdentity()
